@@ -8,18 +8,19 @@
 	//-----------------------------------------------------------------------------------------
 	// Constructor
 	//-----------------------------------------------------------------------------------------
-	BlobDetector::BlobDetector(VideoParameters *video, ImageParameters* image)
+	BlobDetector::BlobDetector(VideoParameters *video_p, ImageParameters* image_p, BlobsInfoDao* blobsInfo_p)
 	{
 		printf("Constructing BlobDetector ...\n");
 
-		videoParams = video;
-		imageParams = image;
+		videoParams = video_p;
+		imageParams = image_p;
+		blobsInfo = blobsInfo_p;
 
-		width = video->captureWidth;
-		height = video->captureHeight;
+		width = video_p->captureWidth;
+		height = video_p->captureHeight;
 
-		lowerThreshold = cvScalar(image->lowerRed, image->lowerGreen, image->lowerBlue);
-		upperThreshold = cvScalar(image->upperRed, image->upperGreen, image->upperBlue);
+		lowerThreshold = cvScalar(image_p->lowerRed, image_p->lowerGreen, image_p->lowerBlue);
+		upperThreshold = cvScalar(image_p->upperRed, image_p->upperGreen, image_p->upperBlue);
 
 		rgbRed = CV_RGB(250, 0, 0);
 		rgbGreen = CV_RGB(0, 250, 0);
@@ -43,7 +44,6 @@
 		// TODO: move structure initializations into constructor
 
 		CvCapture* capture;				// webcam feed structure holder
-		CvSize* imageSize;				// current frame holder (from the camera feed)
 		IplImage *sourceFrame;			// source frame holder
 		IplImage *targetFrame;			// target frame holder
 		IplImage *hsvFrame;				// HSV color space holder
@@ -135,9 +135,9 @@
 	}
 
 	/**
-	 * Starts blob detection in RGB color space.
+	 * Starts blob detection in RGB color space, with blob tracking visuals (video).
 	 */
-	int BlobDetector::startRgb()
+	int BlobDetector::startVideoRgb()
 	{
 		CvCapture* capture;				// webcam feed structure holder
 		CvSize imageSize;				// current frame holder (from the camera feed)
@@ -233,24 +233,26 @@
 	        picWidth = targetFrame->width;
 	        picHeight = targetFrame->height;
 
-	        pt1 = cvPoint(picWidth / 2, 0);
-	        pt2 = cvPoint(picWidth / 2, picHeight);
-	        cvLine(targetFrame, pt1, pt2, rgbRed, thickness);
-
+	        // draw x-axes
 	        pt3 = cvPoint(0, picHeight / 2);
 	        pt4 = cvPoint(picWidth, picHeight / 2);
 	        cvLine(targetFrame, pt3, pt4, rgbRed, thickness);
 
+	        // draw y-axes
+	        pt1 = cvPoint(picWidth/2, 0);
+	        pt2 = cvPoint(picWidth/2, picHeight);
+	        cvLine(targetFrame, pt1, pt2, rgbRed, thickness);
+
 	        cvShowImage("Webcam Preview", targetFrame);
-	        cvShowImage("Processed Video Frames", rgbFrame);
+//	        cvShowImage("Processed Video Frames", rgbFrame);
 
 	        // Show color range values in separate window
-	        cvZero(colorRange);
-	        cvRectangle(colorRange, cvPoint(0, 0), cvPoint(100, 100),
-	        		CV_RGB(imageParams->lowerRed, imageParams->lowerGreen, imageParams->lowerBlue), CV_FILLED);
-	        cvRectangle(colorRange, cvPoint(100, 0), cvPoint(200, 100),
-	        		CV_RGB(imageParams->upperRed, imageParams->upperGreen, imageParams->upperBlue), CV_FILLED);
-	        cvShowImage("Color Range", colorRange);
+//	        cvZero(colorRange);
+//	        cvRectangle(colorRange, cvPoint(0, 0), cvPoint(100, 100),
+//	        		CV_RGB(imageParams->lowerRed, imageParams->lowerGreen, imageParams->lowerBlue), CV_FILLED);
+//	        cvRectangle(colorRange, cvPoint(100, 0), cvPoint(200, 100),
+//	        		CV_RGB(imageParams->upperRed, imageParams->upperGreen, imageParams->upperBlue), CV_FILLED);
+//	        cvShowImage("Color Range", colorRange);
 
 	        // find largest blob (biggest area).
 	        int largestBlobIndex = cvGreaterBlob(blobs);
@@ -263,12 +265,19 @@
 	            cvCircle(targetFrame, pt6, 3, rgbGreen, 2, CV_FILLED, 0);
 
 	            cvShowImage("Webcam Preview", targetFrame);
-	            cvShowImage("Processed Video Frames", colorRange);
+//	            cvShowImage("Processed Video Frames", colorRange);
+
+	            BlobData blobData = packageBlobData(blob, picWidth, picHeight);
+	            this->blobsInfo->setLargestBlob(blobData);
 
 	            printf("\nBlobs found: %lu", blobs.size());
 	            printf("\nPixels labeled: %d", result);
-	            printf("\ncenter-x: %4.2f center-y: %4.2f", blob->centroid.x, blob->centroid.y);
-	            printf("\noffset-x: %4.2f offset-y: %4.2f", ((picWidth/2)-(blob->centroid.x)), (picHeight/2)-(blob->centroid.y));
+	            printf("\ncenter-x: %.2f center-y: %.2f", blobData.centroidX, blobData.centroidY);
+	            printf("\noffset-x: %.2f offset-y: %.2f", blobData.offsetX, blobData.offsetY);
+	            printf("\nradius: %.2f", blobData.radius);
+	            printf("\nwidth: %.2f", blobData.width);
+	            printf("\nheight: %.2f", blobData.height);
+	            printf("\nBLOB LABEL: %d", blobData.blobId);
 	        }
 
 			// escape sequence
@@ -293,4 +302,34 @@
 		cvReleaseCapture(&capture);
 
 		return 0;
+	}
+
+	/**------------------------------------------------------------------------------------
+	 * Helper method.
+	 * Fills and returns BlobData holder with calculated and retrieved data.
+	 --------------------------------------------------------------------------------------*/
+	BlobData BlobDetector::packageBlobData(CvBlob* blob_p, int width, int height)
+	{
+		CvPoint origin = cvPoint(width/2, height/2);
+		CvPoint blobCentroid = cvPoint(blob_p->centroid.x, blob_p->centroid.y);
+
+		BlobData blobDataHolder;
+
+		// TODO: implement another mechanism for blob tracking, as the current one is not reliable
+		blobDataHolder.blobId = blob_p->label;
+
+		// TODO: determine mean color and map it to color codes
+		// for now: 1-red, 2-green, 3-blue, 4-orange
+		blobDataHolder.colorCode = 1;
+
+		blobDataHolder.centroidX = blob_p->centroid.x;
+		blobDataHolder.centroidY = blob_p->centroid.y;
+		blobDataHolder.offsetX = (width/2)-(blob_p->centroid.x);
+		blobDataHolder.offsetY = (height/2)-(blob_p->centroid.y);
+		blobDataHolder.width = blob_p->maxx - blob_p->minx;
+		blobDataHolder.height = blob_p->maxy - blob_p->miny;
+		blobDataHolder.radius = cvDistancePointPoint(blobCentroid, origin);
+		blobDataHolder.angle = cvAngle(blob_p);
+
+		return blobDataHolder;
 	}

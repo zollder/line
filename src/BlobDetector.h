@@ -8,6 +8,7 @@
 // dependencies (headers)
 #include"VideoParameters.h"
 #include"ImageParameters.h"
+#include "BlobsInfoDao.h"
 
 // openCV and cvBlob headers
 #include <cv.h>
@@ -15,8 +16,8 @@
 #include<opencv2/opencv.hpp>
 #include<cvblob.h>
 
-// input/output headers
 #include<iostream>
+#include<cmath>
 
 // name spaces
 using namespace cv;
@@ -37,7 +38,7 @@ class BlobDetector
 	public:
 
 		// constructor
-		BlobDetector(VideoParameters *videoParams, ImageParameters* imageParams);
+		BlobDetector(VideoParameters *video_p, ImageParameters* image_p, BlobsInfoDao* blobsInfo_p);
 
 		// destructor
 		~BlobDetector();
@@ -46,16 +47,17 @@ class BlobDetector
 		void startHsv();
 
 		// start blob detection in RGB color-space
-		int startRgb();
-
-		void stop();
+		int startVideoRgb();
 
 	//-----------------------------------------------------------------------------------------
 	// Private members
 	//-----------------------------------------------------------------------------------------
 	private:
+
+		// object holders
 		VideoParameters* videoParams;
 		ImageParameters* imageParams;
+		BlobsInfoDao* blobsInfo;
 
 		// local capture size holders
 		int width;
@@ -65,8 +67,14 @@ class BlobDetector
 		CvScalar lowerThreshold;
 		CvScalar upperThreshold;
 
-		// pure RGB colors
+		// pure RGB color holders
 		CvScalar rgbRed, rgbGreen, rgbBlue;
+
+		/**------------------------------------------------------------------------------------
+		 * Helper method.
+		 * Fills and returns BlobData holder with calculated and retrieved data.
+		 --------------------------------------------------------------------------------------*/
+		BlobData packageBlobData(CvBlob* blob_p, int width, int height);
 };
 
 #endif

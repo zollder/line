@@ -5,14 +5,17 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../src/BlobDetector.cpp \
+../src/BlobsInfoDao.cpp \
 ../src/blob.cpp 
 
 OBJS += \
 ./src/BlobDetector.o \
+./src/BlobsInfoDao.o \
 ./src/blob.o 
 
 CPP_DEPS += \
 ./src/BlobDetector.d \
+./src/BlobsInfoDao.d \
 ./src/blob.d 
 
 
