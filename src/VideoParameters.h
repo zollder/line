@@ -23,7 +23,7 @@ class VideoParameters
 		// constructor
 		VideoParameters(int id, int width, int height)
 		{
-			printf("Initializing VideoParameters ... \n");
+			printf("\nInitializing VideoParameters ... ");
 
 			cameraId = id;
 			captureWidth = width;
@@ -33,7 +33,7 @@ class VideoParameters
 		// destructor
 		~VideoParameters()
 		{
-			printf("\n\nDestroying VideoParameters ... \n");
+			printf("\nDestroying VideoParameters ... ");
 		}
 };
 

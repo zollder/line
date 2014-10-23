@@ -1,3 +1,4 @@
+#include <cv.h>
 #include <stdio.h>
 
 #ifndef imageparameters_h
@@ -14,48 +15,75 @@ class ImageParameters
 	//-----------------------------------------------------------------------------------------
 	public:
 
-		double lowerRed;
-		double lowerGreen;
-		double lowerBlue;
+		double lower1;
+		double lower2;
+		double lower3;
 
-		double upperRed;
-		double upperGreen;
-		double upperBlue;
+		double upper1;
+		double upper2;
+		double upper3;
 
 		// constructor
 		ImageParameters()
 		{
-			lowerRed = 0;
-			lowerGreen = 0;
-			lowerBlue = 0;
+			printf("\nInitializing ImageParameters ...");
 
-			upperRed = 255;
-			upperGreen = 255;
-			upperBlue = 255;
+			lower1 = 0;
+			lower2 = 0;
+			lower3 = 0;
+
+			upper1 = 255;
+			upper2 = 255;
+			upper3 = 255;
 		}
 
 		// destructor
 		~ImageParameters()
 		{
-			printf("\n\nDestroying ImageParameters ... \n");
+			printf("\nDestroying ImageParameters ...");
 		}
 
-		// sets lower RGB threshold values
-		void setLowerRgb(double R, double G, double B)
+		// sets lower RGB or HSV threshold values
+		void setLowerRgb(double first, double second, double third)
 		{
-			lowerRed = R;
-			lowerGreen = G;
-			lowerBlue = B;
+			lower1 = first;
+			lower2 = second;
+			lower3 = third;
 		}
 
-		// sets upper RGB threshold values
-		void setUpperRgb(double R, double G, double B)
+		// sets upper RGB or HSV threshold values
+		void setUpperRgb(double first, double second, double third)
 		{
-			upperRed = R;
-			upperGreen = G;
-			upperBlue = B;
+			upper1 = first;
+			upper2 = second;
+			upper3 = third;
 		}
 
+		// sets lower RGB or HSV threshold values
+		void setLowerHsv(double first, double second, double third)
+		{
+			lower1 = first;
+			lower2 = second;
+			lower3 = third;
+		}
+
+		// sets upper RGB or HSV threshold values
+		void setUpperHsv(double first, double second, double third)
+		{
+			upper1 = first;
+			upper2 = second;
+			upper3 = third;
+		}
+
+		CvScalar getLowerThreshold()
+		{
+			return cvScalar(lower1, lower2, lower3);
+		}
+
+		CvScalar getUpperThreshold()
+		{
+			return cvScalar(upper1, upper2, upper3);
+		}
 };
 
 #endif

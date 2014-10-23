@@ -10,7 +10,7 @@
 	//-----------------------------------------------------------------------------------------
 	BlobsInfoDao::BlobsInfoDao()
 	{
-		printf("Constructing BlobsInfoDao ...\n");
+		printf("\nConstructing BlobsInfoDao ...");
 		blobList = new list<BlobData>();
 	}
 
@@ -19,7 +19,7 @@
 	//-----------------------------------------------------------------------------------------
 	BlobsInfoDao::~BlobsInfoDao()
 	{
-		printf("Destroying BlobsInfoDao ...\n");
+		printf("\nDestroying BlobsInfoDao ...");
 
 		blobList->clear();
 		delete blobList;

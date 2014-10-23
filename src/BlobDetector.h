@@ -9,6 +9,7 @@
 #include"VideoParameters.h"
 #include"ImageParameters.h"
 #include "BlobsInfoDao.h"
+#include "ColorConverter.h"
 
 // openCV and cvBlob headers
 #include <cv.h>
@@ -16,6 +17,7 @@
 #include<opencv2/opencv.hpp>
 #include<cvblob.h>
 
+#include <time.h>
 #include<iostream>
 #include<cmath>
 
@@ -46,8 +48,11 @@ class BlobDetector
 		// start blob detection in HSV color-space
 		void startHsv();
 
-		// start blob detection in RGB color-space
-		int startVideoRgb();
+		// start blob detection in RGB color-space with video
+		int startRgb(bool videoOn);
+
+		// start blob detection in HSV color-space with video
+		int startHsv(bool videoOn);
 
 	//-----------------------------------------------------------------------------------------
 	// Private members
@@ -58,6 +63,7 @@ class BlobDetector
 		VideoParameters* videoParams;
 		ImageParameters* imageParams;
 		BlobsInfoDao* blobsInfo;
+		ColorConverter* converter;
 
 		// local capture size holders
 		int width;

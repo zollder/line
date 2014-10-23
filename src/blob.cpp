@@ -13,11 +13,15 @@ int main()
 	BlobsInfoDao* blobsInfoDao = new BlobsInfoDao();
 
 	// color ranges for orange
-	imageParams->setLowerRgb(170, 0, 0);
-	imageParams->setUpperRgb(255, 100, 100);
+	imageParams->setLowerHsv(0, 100, 150);
+	imageParams->setUpperHsv(25, 255, 255);
+
+//	imageParams->setLowerRgb(150, 0, 0);
+//	imageParams->setUpperRgb(255, 100, 100);
 
 	BlobDetector* blobDetector = new BlobDetector(videoParams, imageParams, blobsInfoDao);
-	blobDetector->startVideoRgb();
+	blobDetector->startHsv(false);
+//	blobDetector->startRgb(true);
 
 	// cleanup
 	delete blobDetector;
