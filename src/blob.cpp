@@ -8,20 +8,16 @@
 
 int main()
 {
-	VideoParameters* videoParams = new VideoParameters(1, 1920, 1080);
+	VideoParameters* videoParams = new VideoParameters(1, 800, 600);
 	ImageParameters* imageParams = new ImageParameters();
 	BlobsInfoDao* blobsInfoDao = new BlobsInfoDao();
 
-	// color ranges for orange
-	imageParams->setLowerHsv(0, 100, 150);
-	imageParams->setUpperHsv(25, 255, 255);
-
-//	imageParams->setLowerRgb(150, 0, 0);
-//	imageParams->setUpperRgb(255, 100, 100);
+	imageParams->setLowerHsv(128, 124, 89);
+	imageParams->setUpperHsv(179, 255, 255);
 
 	BlobDetector* blobDetector = new BlobDetector(videoParams, imageParams, blobsInfoDao);
-	blobDetector->startHsv(false);
-//	blobDetector->startRgb(true);
+//	blobDetector->startHsvCalibration(false);
+	blobDetector->startHsv(false, true);
 
 	// cleanup
 	delete blobDetector;

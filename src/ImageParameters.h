@@ -15,26 +15,26 @@ class ImageParameters
 	//-----------------------------------------------------------------------------------------
 	public:
 
-		double lower1;
-		double lower2;
-		double lower3;
+		int lowerH;
+		int lowerS;
+		int lowerV;
 
-		double upper1;
-		double upper2;
-		double upper3;
+		int upperH;
+		int upperS;
+		int upperV;
 
 		// constructor
 		ImageParameters()
 		{
 			printf("\nInitializing ImageParameters ...");
 
-			lower1 = 0;
-			lower2 = 0;
-			lower3 = 0;
+			lowerH = 0;
+			lowerS = 0;
+			lowerV = 0;
 
-			upper1 = 255;
-			upper2 = 255;
-			upper3 = 255;
+			upperH = 255;
+			upperS = 255;
+			upperV = 255;
 		}
 
 		// destructor
@@ -43,46 +43,32 @@ class ImageParameters
 			printf("\nDestroying ImageParameters ...");
 		}
 
-		// sets lower RGB or HSV threshold values
-		void setLowerRgb(double first, double second, double third)
+		// sets lower HSV threshold values
+		void setLowerHsv(int h, int s, int v)
 		{
-			lower1 = first;
-			lower2 = second;
-			lower3 = third;
+			lowerH = h;
+			lowerS = s;
+			lowerV = v;
 		}
 
-		// sets upper RGB or HSV threshold values
-		void setUpperRgb(double first, double second, double third)
+		// sets upper HSV threshold values
+		void setUpperHsv(int h, int s, int v)
 		{
-			upper1 = first;
-			upper2 = second;
-			upper3 = third;
+			upperH = h;
+			upperS = s;
+			upperV = v;
 		}
 
-		// sets lower RGB or HSV threshold values
-		void setLowerHsv(double first, double second, double third)
+		// returns lower HSV limit as an OpenCV scalar value
+		CvScalar getLowerLimit()
 		{
-			lower1 = first;
-			lower2 = second;
-			lower3 = third;
+			return cvScalar(lowerH, lowerS, lowerV);
 		}
 
-		// sets upper RGB or HSV threshold values
-		void setUpperHsv(double first, double second, double third)
+		// returns upper HSV limit as an OpenCV scalar value
+		CvScalar getUpperLimit()
 		{
-			upper1 = first;
-			upper2 = second;
-			upper3 = third;
-		}
-
-		CvScalar getLowerThreshold()
-		{
-			return cvScalar(lower1, lower2, lower3);
-		}
-
-		CvScalar getUpperThreshold()
-		{
-			return cvScalar(upper1, upper2, upper3);
+			return cvScalar(upperH, upperS, upperV);
 		}
 };
 

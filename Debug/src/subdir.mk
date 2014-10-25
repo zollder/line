@@ -6,19 +6,16 @@
 CPP_SRCS += \
 ../src/BlobDetector.cpp \
 ../src/BlobsInfoDao.cpp \
-../src/ColorConverter.cpp \
 ../src/blob.cpp 
 
 OBJS += \
 ./src/BlobDetector.o \
 ./src/BlobsInfoDao.o \
-./src/ColorConverter.o \
 ./src/blob.o 
 
 CPP_DEPS += \
 ./src/BlobDetector.d \
 ./src/BlobsInfoDao.d \
-./src/ColorConverter.d \
 ./src/blob.d 
 
 
