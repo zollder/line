@@ -8,7 +8,7 @@
 
 int main()
 {
-	VideoParameters* videoParams = new VideoParameters(1, 800, 600);
+	VideoParameters* videoParams = new VideoParameters(1, 1920, 1080);
 	ImageParameters* imageParams = new ImageParameters();
 	BlobsInfoDao* blobsInfoDao = new BlobsInfoDao();
 
@@ -17,7 +17,7 @@ int main()
 
 	BlobDetector* blobDetector = new BlobDetector(videoParams, imageParams, blobsInfoDao);
 //	blobDetector->startHsvCalibration(false);
-	blobDetector->startHsv(false, true);
+	blobDetector->startHsv(true, true);
 
 	// cleanup
 	delete blobDetector;

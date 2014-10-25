@@ -254,7 +254,7 @@
 				printf("FPS = %.2f\n", fps);
 			}
 
-			cvFlip(targetFrame, targetFrame, 1);
+//			cvFlip(targetFrame, targetFrame, 1);
 
 			// copies one array to another with optional scaling and optional type conversion
 			// cvConvert can be used instead (scale=1, shift=0 no prescaling is done)
@@ -262,7 +262,7 @@
 
 			// smoothes the frame with Gaussian filter with 5x5 kernel (done in-place)
 			// good results, but slower than other filters (see details on  pp. 111-114 of the "Learning OpenCV")
-			cvSmooth(targetFrame, smoothedFrame, CV_GAUSSIAN_5x5, 5, 5);
+			cvSmooth(targetFrame, smoothedFrame, CV_GAUSSIAN, 3, 3);
 
 			// converts the frame from RGB to HSV color-space
 			cvCvtColor(smoothedFrame, hsvFrame, COLOR_BGR2HSV);
@@ -272,10 +272,10 @@
 			cvInRangeS(hsvFrame, imageParams->getLowerLimit(), imageParams->getUpperLimit(), segmentedFrame);
 
 			//morphological opening (removes small objects from the foreground)
-			cvMorphologyEx(segmentedFrame, segmentedFrame, 0, 0, CV_MOP_OPEN, 2);
+			cvMorphologyEx(segmentedFrame, segmentedFrame, 0, 0, CV_MOP_OPEN, 1);
 
 			//morphological closing (removes small holes from the foreground)
-			cvMorphologyEx(segmentedFrame, segmentedFrame, 0, 0, CV_MOP_CLOSE, 2);
+			cvMorphologyEx(segmentedFrame, segmentedFrame, 0, 0, CV_MOP_CLOSE, 1);
 
 			// find, filter (by area) and render blobs
 			cvLabel(segmentedFrame, labelFrame, blobs);
