@@ -1,7 +1,9 @@
 
 #include "AdvBlobDetector.h"
 
-#include <highgui.h>
+#include <opencv/highgui.h>
+#include <opencv2/highgui.hpp>
+
 //---------------------------------------------------------------------------------------------
 // AdvBlobDetector class implementation.
 //---------------------------------------------------------------------------------------------
@@ -101,7 +103,7 @@
 	    	drawKeypoints(segmentedFrame, keyPoints, targetFrame, CV_RGB(0,255,0), DrawMatchesFlags::DEFAULT);
 	    	approxContours.resize(contours.size());
 
-            for( int i = 0; i < contours.size(); ++i )
+            for(unsigned int i = 0; i < contours.size(); ++i )
             {
 				approxPolyDP( Mat(contours[i]), approxContours[i], 4, 1 );
 				drawContours(targetFrame, contours, i, CV_RGB(rand()&255, rand()&255, rand()&255) );

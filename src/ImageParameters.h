@@ -1,8 +1,10 @@
-#include <cv.h>
+#include <opencv2/opencv.hpp>
 #include <stdio.h>
 
 #ifndef imageparameters_h
 #define imageparameters_h
+
+using namespace cv;
 
 /*
  * ImageParameters class.
