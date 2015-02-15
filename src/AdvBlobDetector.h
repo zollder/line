@@ -1,8 +1,9 @@
 /*
- * BlobDetector.h
+ * AdvBlobDetector.h
  *
- *  Created on: Oct 15, 2014
- *      Author: zollder
+ *  Created on: 04/02/2015
+ *  Author: zollder
+ *  Inspired by: https://code.google.com/p/my-masters-thesis/source/browse/trunk/MastersThesis/Sample/SimpleBlobDetecter_demo.cpp?r=66
  */
 
 // dependencies (headers)
@@ -25,13 +26,13 @@ using namespace cv;
 using namespace cvb;
 using namespace std;
 
-#ifndef blobdetector_h
-#define blobdetector_h
+#ifndef advblobdetector_h
+#define advblobdetector_h
 
 //-----------------------------------------------------------------------------------------
-// BlobDetector interface.
+// AdvBlobDetector interface.
 //-----------------------------------------------------------------------------------------
-class BlobDetector
+class AdvBlobDetector
 {
 	//-----------------------------------------------------------------------------------------
 	// Public members
@@ -39,10 +40,10 @@ class BlobDetector
 	public:
 
 		// constructor
-		BlobDetector(VideoParameters *video_p, ImageParameters* image_p, BlobsInfoDao* blobsInfo_p);
+		AdvBlobDetector(VideoParameters *video_p, ImageParameters* image_p, BlobsInfoDao* blobsInfo_p);
 
 		// destructor
-		~BlobDetector();
+		~AdvBlobDetector();
 
 		/**------------------------------------------------------------------------------------
 		 * Starts blob detection in HSV color space.
@@ -68,7 +69,7 @@ class BlobDetector
 		BlobsInfoDao* blobsInfo;
 
 		// pure RGB color holders
-		CvScalar rgbRed, rgbGreen, rgbBlue;
+		cv::Scalar rgbRed, rgbGreen, rgbBlue;
 
 		/**------------------------------------------------------------------------------------
 		 * Helper method.

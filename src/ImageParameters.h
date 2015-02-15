@@ -60,15 +60,15 @@ class ImageParameters
 		}
 
 		// returns lower HSV limit as an OpenCV scalar value
-		CvScalar getLowerLimit()
+		cv::Scalar getLowerLimit()
 		{
-			return cvScalar(lowerH, lowerS, lowerV);
+			return cv::Scalar(lowerH, lowerS, lowerV);
 		}
 
 		// returns upper HSV limit as an OpenCV scalar value
-		CvScalar getUpperLimit()
+		cv::Scalar getUpperLimit()
 		{
-			return cvScalar(upperH, upperS, upperV);
+			return cv::Scalar(upperH, upperS, upperV);
 		}
 };
 

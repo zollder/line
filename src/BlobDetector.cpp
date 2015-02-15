@@ -251,7 +251,7 @@
 				++counter;
 				sec = difftime(end, start);
 				fps = counter / sec;
-				printf("FPS = %.2f\n", fps);
+				printf("\nFPS = %.2f\n", fps);
 			}
 
 //			cvFlip(targetFrame, targetFrame, 1);
@@ -320,13 +320,14 @@
 	            BlobData blobData = packageBlobData(blob, picWidth, picHeight);
 	            this->blobsInfo->setLargestBlob(blobData);
 
-	            printf("\nBlobs found: %lu", blobs.size());
-	            printf("\ncenter-x: %.2f center-y: %.2f", blobData.centroidX, blobData.centroidY);
-	            printf("\noffset-x: %.2f offset-y: %.2f", blobData.offsetX, blobData.offsetY);
-	            printf("\nradius: %.2f", blobData.radius);
-	            printf("\nwidth: %.2f", blobData.width);
-	            printf("\nheight: %.2f", blobData.height);
-	            printf("\nBLOB LABEL: %d", blobData.blobId);
+//	            printf("\nBlobs found: %lu", blobs.size());
+//	            printf("\ncenter-x: %.2f center-y: %.2f", blobData.centroidX, blobData.centroidY);
+//	            printf("\noffset-x: %.2f offset-y: %.2f", blobData.offsetX, blobData.offsetY);
+//	            printf("\nradius: %.2f", blobData.radius);
+//	            printf("\nwidth: %.2f", blobData.width);
+//	            printf("\nheight: %.2f", blobData.height);
+//	            printf("\nBLOB LABEL: %d", blobData.blobId);
+	            printf("\nangle: %.2f", blobData.angle);
 	        }
 
             if (videoOn)
@@ -381,7 +382,7 @@
 		blobDataHolder.width = blob_p->maxx - blob_p->minx;
 		blobDataHolder.height = blob_p->maxy - blob_p->miny;
 		blobDataHolder.radius = cvDistancePointPoint(blobCentroid, origin);
-		blobDataHolder.angle = cvAngle(blob_p);
+		blobDataHolder.angle = cvAngle(blob_p)*57.2957795;
 
 		return blobDataHolder;
 	}

@@ -5,21 +5,25 @@
 #include"VideoParameters.h"
 #include"ImageParameters.h"
 #include"BlobDetector.h"
+#include"AdvBlobDetector.h"
 
 int main()
 {
-	VideoParameters* videoParams = new VideoParameters(1, 1920, 1080);
+	VideoParameters* videoParams = new VideoParameters(0, 1366, 768);
 	ImageParameters* imageParams = new ImageParameters();
 	BlobsInfoDao* blobsInfoDao = new BlobsInfoDao();
 
-	imageParams->setLowerHsv(128, 124, 89);
-	imageParams->setUpperHsv(179, 255, 255);
+	imageParams->setLowerHsv(50, 66, 150);
+	imageParams->setUpperHsv(115, 255, 255);
 
 	BlobDetector* blobDetector = new BlobDetector(videoParams, imageParams, blobsInfoDao);
-//	blobDetector->startHsvCalibration(false);
-	blobDetector->startHsv(true, true);
+	AdvBlobDetector* detector = new AdvBlobDetector(videoParams, imageParams, blobsInfoDao);
+	blobDetector->startHsvCalibration(false);
+//	blobDetector->startHsv(true, true);
+//	detector->startHsv(true, true);
 
 	// cleanup
+	delete detector;
 	delete blobDetector;
 	delete videoParams;
 	delete imageParams;
