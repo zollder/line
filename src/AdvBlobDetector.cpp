@@ -61,25 +61,7 @@
     	// -------------------------------------------------------------------------
         // Initialize blob parameters
         // -------------------------------------------------------------------------
-    	SimpleBlobDetector::Params params;
 
-    	params.filterByArea = true;
-//    	params.filterByConvexity = true;
-    	params.filterByInertia = true;
-    	params.filterByCircularity = false;
-    	params.filterByColor = true;
-
-    	params.minArea = 100;
-//    	params.minConvexity = 0.3;
-//    	params.minDistBetweenBlobs = 0;
-//    	params.minInertiaRatio = 0.01;
-    	params.blobColor = 200;
-
-    	params.maxArea = 10000;
-//    	params.maxConvexity = 10;
-
-    	SimpleBlobDetector blobDetector(params);
-    	blobDetector.create("BlobDetector");
     	// ----------------------------------------------
 
 		// retrieve source frame to determine frame size
@@ -99,21 +81,9 @@
 	    	morphologyEx(segmentedFrame, segmentedFrame, CV_MOP_OPEN, 1);
 	    	morphologyEx(segmentedFrame, segmentedFrame, CV_MOP_CLOSE, 2);
 
-	    	blobDetector.detect(segmentedFrame, keyPoints, contours);
-	    	drawKeypoints(segmentedFrame, keyPoints, targetFrame, CV_RGB(0,255,0), DrawMatchesFlags::DEFAULT);
-	    	approxContours.resize(contours.size());
-
-            for(unsigned int i = 0; i < contours.size(); ++i )
-            {
-				approxPolyDP( Mat(contours[i]), approxContours[i], 4, 1 );
-				drawContours(targetFrame, contours, i, CV_RGB(rand()&255, rand()&255, rand()&255) );
-				drawContours(targetFrame, approxContours, i, CV_RGB(rand()&255, rand()&255, rand()&255) );
-            }
-            cout << "Keypoints " << keyPoints.size() << endl;
-
 //	    	Canny(segmentedFrame, segmentedFrame, 0, 30, 3);
-	    	imshow("edges1", segmentedFrame);
-	    	imshow("edges2", targetFrame);
+	    	imshow("edges1", sourceFrame);
+	    	imshow("edges2", segmentedFrame);
 
 //	    	Mat blobImg;
 //	    	cv::drawKeypoints(sourceFrame, keyPoints, blobImg);
