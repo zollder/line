@@ -26,5 +26,6 @@ SUBDIRS := \
 src/sys \
 src/core \
 src/commons \
+src/com \
 src \
 

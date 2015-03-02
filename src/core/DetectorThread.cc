@@ -37,7 +37,7 @@
 	void* DetectorThread::run()
 	{
 		//	detector->startHsvCalibration(false);
-		detector->startHsv();
+		detector->startHsv(true, false);
 
 		return NULL;
 	}

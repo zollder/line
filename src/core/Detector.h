@@ -45,7 +45,7 @@ class Detector
 		 * Starts blob detection in HSV color space.
 		 * Enables/disables corresponding options with true/false values respectively
 		 ------------------------------------------------------------------------------------*/
-		int startHsv();
+		int startHsv(bool videoOn, bool fpsOn);
 
 	//-----------------------------------------------------------------------------------------
 	// Private members
@@ -61,6 +61,12 @@ class Detector
 		Scalar rgbBlue = CV_RGB(0, 0, 250);
 
 		Point pt1, pt2, pt3, pt4, pt5;
+
+		// retrieves and saves object data in the shared data structure
+		void saveData(RotatedRect &object, bool valid);
+
+		// filters largest contour rectangle according to specified criteria
+		bool isValid(RotatedRect &rectangle);
 };
 
 #endif

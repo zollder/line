@@ -11,6 +11,7 @@ RM := rm -rf
 -include src/sys/subdir.mk
 -include src/core/subdir.mk
 -include src/commons/subdir.mk
+-include src/com/subdir.mk
 -include src/subdir.mk
 -include subdir.mk
 -include objects.mk

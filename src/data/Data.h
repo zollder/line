@@ -7,10 +7,6 @@
 // Data structure declaration: line info holder
 struct Data
 {
-	// general info
-	int objectId;
-	int colorCode;
-
 	// line's center coordinates(pixels)
 	float centroidX;
 	float centroidY;
@@ -22,7 +18,6 @@ struct Data
 	// dimensions (pixels)
 	float width;
 	float height;
-	float radius;
 
 	// line's angle orientation
 	float angle;
@@ -34,6 +29,17 @@ struct Data
 
 	// read/write protection mechanism
 	Mutexx mutex;
+
+	void reset()
+	{
+		centroidX = 0.0;
+		centroidY = 0.0;
+		offsetX = 0.0;
+		offsetY = 0.0;
+		width = 0.0;
+		height = 0.0;
+		angle = 0.0;
+	}
 };
 
 

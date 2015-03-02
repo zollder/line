@@ -47,15 +47,12 @@ class DataService
 		void copyData()
 		{
 			data->mutex.lock();
-				dataHolder[0] = 1.0;
-				dataHolder[1] = (float) data->objectId;
-				dataHolder[2] = (float) data->colorCode;
-				dataHolder[3] = data->offsetX;
-				dataHolder[4] = data->offsetY;
-				dataHolder[5] = data->angle;
-				dataHolder[6] = data->radius;
-				dataHolder[7] = data->width;
-				dataHolder[8] = data->height;
+				dataHolder[0] = 2.0;
+				dataHolder[1] = data->offsetX;
+				dataHolder[2] = data->offsetY;
+				dataHolder[3] = data->angle;
+				dataHolder[4] = data->width;
+				dataHolder[5] = data->height;
 			data->mutex.unlock();
 		}
 };
