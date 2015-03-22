@@ -37,7 +37,6 @@ class DetectorThread : public BaseThread
 	//-----------------------------------------------------------------------------------------
 	private:
 
-		FdTimer* timer;
 		Detector* detector;
 };
 

@@ -84,6 +84,7 @@ void SocketServer::start()
 		{
 			//Max Linux delay is 60 seconds by default.
 			//creates TIME_WAIT for making sure all socket connection had chance to send data back or from server.
+			// TODO: implement FD timer
 			sleep(10);
 		}
 

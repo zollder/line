@@ -7,6 +7,7 @@
 #include <pthread.h>
 #include <sstream>
 #include <stdio.h>
+#include "../commons/Config.h"
 
 #ifndef basethread_h
 #define basethread_h

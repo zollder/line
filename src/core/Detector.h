@@ -16,6 +16,7 @@
 
 // dependencies (headers)
 #include "../commons/Parameters.h"
+#include "../commons/Config.h"
 #include "../data/DataService.h"
 
 // name spaces
@@ -62,8 +63,19 @@ class Detector
 
 		Point pt1, pt2, pt3, pt4, pt5;
 
+		float ratio = 0.0;
+		float angle = 0.0;
+		float offsetX = 0.0;
+		float offsetY = 0.0;
+
+		// performs preliminary data processing
+		void preprocessData(RotatedRect &object);
+
 		// retrieves and saves object data in the shared data structure
-		void saveData(RotatedRect &object, bool valid);
+		void saveData(RotatedRect &object);
+
+		// resets transfer data holder (to zeros)
+		void resetData(void);
 
 		// filters largest contour rectangle according to specified criteria
 		bool isValid(RotatedRect &rectangle);

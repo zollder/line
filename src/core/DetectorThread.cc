@@ -18,7 +18,6 @@
 		printf("Constructing DetectorThread ...\n");
 
 		setThreadId(threadId);
-		timer = new FdTimer(getThreadId(), DETECTOR_INTERVAL);
 		this->detector = detector_p;
 	}
 
@@ -28,7 +27,6 @@
 	DetectorThread::~DetectorThread()
 	{
 		printf("Destroying DetectorThread thread ...\n");
-		delete timer;
 	}
 
 	//-----------------------------------------------------------------------------------------
@@ -36,8 +34,9 @@
 	//-----------------------------------------------------------------------------------------
 	void* DetectorThread::run()
 	{
+		printf("Detector started.\n");
 		//	detector->startHsvCalibration(false);
-		detector->startHsv(true, false);
+		detector->startHsv(VIDEO_ON, FPS_ON);
 
 		return NULL;
 	}

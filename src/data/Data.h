@@ -18,6 +18,7 @@ struct Data
 	// dimensions (pixels)
 	float width;
 	float height;
+	float area;
 
 	// line's angle orientation
 	float angle;
@@ -38,6 +39,7 @@ struct Data
 		offsetY = 0.0;
 		width = 0.0;
 		height = 0.0;
+		area = 0.0;
 		angle = 0.0;
 	}
 };

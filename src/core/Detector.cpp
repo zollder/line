@@ -10,7 +10,7 @@
 	//-----------------------------------------------------------------------------------------
 	Detector::Detector(Parameters params, DataService* service)
 	{
-		printf("\nConstructing Detector ...");
+		printf("Constructing Detector ...\n");
 		config = params;
 		dataService = service;
 
@@ -31,7 +31,7 @@
 	//-----------------------------------------------------------------------------------------
 	Detector::~Detector()
 	{
-		printf("\nDestroying Detector ...");
+		printf("Destroying Detector ...\n");
 	}
 
 	/**------------------------------------------------------------------------------------
@@ -39,6 +39,8 @@
 	 ------------------------------------------------------------------------------------*/
 	int Detector::startHsv(bool videoOn, bool fpsOn)
 	{
+		printf("Detector started.");
+
 		//-----------------------------fps test variables
 	    time_t start, end;
 	    double fps, sec;
@@ -118,9 +120,13 @@
 				bool valid = isValid(largestRectangle);
 				if (valid)
 				{
-					this->saveData(largestRectangle, valid);
-					printf("Area:%5.0f, Ang:%5.0f, W:%5.0f, H:%5.0f\n", largestRectangle.size.area(), largestRectangle.angle,
-							largestRectangle.size.width, largestRectangle.size.height);
+					// calculate inclination angle and object area
+					this->preprocessData(largestRectangle);
+
+					// save and print
+					this->saveData(largestRectangle);
+					printf("angle:%5.0f width:%5.0f height:%5.0f area:%5.0f ratio:%5.2f\n",
+							dataService->data->angle, dataService->data->width, dataService->data->height, dataService->data->area, ratio);
 
 					// draw contour and rectangle for the largest detected object on the source frame
 					Point2f vertices[4];
@@ -133,7 +139,7 @@
 					circle(sourceFrame, pt6, 2, rgbGreen, 2, CV_FILLED, 0);
 				}
 				else
-					this->saveData(largestRectangle, valid);
+					this->resetData();
 
 				// draw all detected contours and rectangles (for debugging purposes)
 				if (videoOn)
@@ -183,25 +189,34 @@
 	}
 
 	/**------------------------------------------------------------------------------------
-	 * Filters largest contour rectangle according to specified criteria.
+	 * Performs preliminary processing (interprets and calculates) of object parameters.
+	 ------------------------------------------------------------------------------------*/
+	void Detector::preprocessData(RotatedRect &rectangle)
+	{
+		// calculate centroid offset from the coordinates origin
+		offsetX = (float) (config.frameWidth/2)-(rectangle.center.x);
+		offsetY = (float) (config.frameHeight/2)-(rectangle.center.y);
+
+		// calculate width/height ratio
+		ratio = rectangle.size.width / rectangle.size.height;
+
+		// interpret inclination angle
+		if (ratio > 1)
+			angle = 90 + rectangle.angle;
+		else
+			angle = rectangle.angle;
+	}
+
+	/**------------------------------------------------------------------------------------
+	 * Filters and validates object based on it's properties.
 	 ------------------------------------------------------------------------------------*/
 	bool Detector::isValid(RotatedRect &rectangle)
 	{
 		// filter by area
-		if (rectangle.size.area() < 2400)
+		if (rectangle.size.area() < MIN_AREA)
 			return false;
 
-		if (rectangle.size.area() > 10000)
-			return false;
-
-		// filter by width/height ratio
-		float width = rectangle.size.width;
-		float heigth = rectangle.size.height;
-
-		if ((width >= heigth) and (width/heigth < 2))
-			return false;
-
-		if (((width <= heigth) and (heigth/width < 2)))
+		if (rectangle.size.area() > MAX_AREA)
 			return false;
 
 		return true;
@@ -210,27 +225,28 @@
 	/**------------------------------------------------------------------------------------
 	 * Retrieves and saves object data in the shared data structure
 	 ------------------------------------------------------------------------------------*/
-	void Detector::saveData(RotatedRect &rectangle, bool valid)
+	void Detector::saveData(RotatedRect &rectangle)
 	{
-		// TODO: interpret angle value correctly
-		if (valid)
-		{
 			dataService->data->mutex.lock();
 				dataService->data->centroidX = rectangle.center.x;
 				dataService->data->centroidY = rectangle.center.y;
-				dataService->data->angle = rectangle.angle;
-				dataService->data->offsetX = (float) (config.frameWidth/2)-(rectangle.center.x);
-				dataService->data->offsetY = (float) (config.frameHeight/2)-(rectangle.center.y);
+				dataService->data->angle = this->angle;
+				dataService->data->offsetX = this->offsetX;
+				dataService->data->offsetY = this->offsetY;
 				dataService->data->width = rectangle.size.width;
 				dataService->data->height = rectangle.size.height;
+				dataService->data->area = rectangle.size.area();
 			dataService->data->mutex.unlock();
-		}
-		else
-		{
+	}
+
+	/**------------------------------------------------------------------------------------
+	 * Resets (zeroes) data holder.
+	 ------------------------------------------------------------------------------------*/
+	void Detector::resetData()
+	{
 			dataService->data->mutex.lock();
 				dataService->data->reset();
 			dataService->data->mutex.unlock();
-		}
 	}
 
 

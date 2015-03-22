@@ -17,7 +17,7 @@
 	{
 		printf("Constructing BaseThread ...\n");
 
-		setThreadId(1);
+		setThreadId(BASE_THREAD_ID);
 		setRunning(false);
 		setDetached(false);
 	}
