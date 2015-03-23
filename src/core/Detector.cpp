@@ -227,16 +227,16 @@
 	 ------------------------------------------------------------------------------------*/
 	void Detector::saveData(RotatedRect &rectangle)
 	{
-			dataService->data->mutex.lock();
-				dataService->data->centroidX = rectangle.center.x;
-				dataService->data->centroidY = rectangle.center.y;
-				dataService->data->angle = this->angle;
-				dataService->data->offsetX = this->offsetX;
-				dataService->data->offsetY = this->offsetY;
-				dataService->data->width = rectangle.size.width;
-				dataService->data->height = rectangle.size.height;
-				dataService->data->area = rectangle.size.area();
-			dataService->data->mutex.unlock();
+		dataService->data->mutex.lock();
+			dataService->data->centroidX = rectangle.center.x;
+			dataService->data->centroidY = rectangle.center.y;
+			dataService->data->angle = this->angle;
+			dataService->data->offsetX = this->offsetX;
+			dataService->data->offsetY = this->offsetY;
+			dataService->data->width = rectangle.size.width;
+			dataService->data->height = rectangle.size.height;
+			dataService->data->area = rectangle.size.area();
+		dataService->data->mutex.unlock();
 	}
 
 	/**------------------------------------------------------------------------------------
@@ -244,9 +244,9 @@
 	 ------------------------------------------------------------------------------------*/
 	void Detector::resetData()
 	{
-			dataService->data->mutex.lock();
-				dataService->data->reset();
-			dataService->data->mutex.unlock();
+		dataService->data->mutex.lock();
+			dataService->data->reset();
+		dataService->data->mutex.unlock();
 	}
 
 
